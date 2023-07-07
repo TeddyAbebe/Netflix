@@ -3,9 +3,35 @@ import styled from "styled-components";
 import BackgroundImage from "../components/BackgroundImage";
 import Header from "../components/Header";
 import { useState } from "react";
+import { firebaseAuth } from "../utils/firebase-config";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSignIn = async () => {
+    try {
+      const { email, password } = formValues;
+
+      await createUserWithEmailAndPassword(firebaseAuth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if (currentUser) navigate("/");
+  });
+
   return (
     <Container showPassword={showPassword}>
       <BackgroundImage />
@@ -20,15 +46,38 @@ export default function SignUp() {
             </h6>
           </div>
           <div className="form">
-            <input type="email" placeholder="Email Address" name="email" />
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={formValues.email}
+              onChange={(e) =>
+                setFormValues({
+                  ...formValues,
+                  [e.target.name]: e.target.value,
+                })
+              }
+            />
+
             {showPassword && (
-              <input type="password" placeholder="Password" name="password" />
+              <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={formValues.password}
+                onChange={(e) =>
+                  setFormValues({
+                    ...formValues,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+              />
             )}
             {!showPassword && (
               <button onClick={() => setShowPassword(true)}>Get Started</button>
             )}
           </div>
-          <button>Sign Up</button>
+          <button onClick={handleSignIn}>Sign Up</button>
         </div>
       </div>
     </Container>
@@ -64,7 +113,7 @@ const Container = styled.div`
         input {
           color: black;
           border: none;
-          padding: 1.5rem;
+          padding: 1.2rem;
           font-size: 1.2rem;
           border: 1px solid black;
           &:focus {
