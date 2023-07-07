@@ -113,6 +113,7 @@ const Container = styled.div`
         input {
           color: black;
           border: none;
+          border-radius: 0.4rem;
           padding: 1.2rem;
           font-size: 1.2rem;
           border: 1px solid black;
@@ -136,7 +137,7 @@ const Container = styled.div`
         border: none;
         cursor: pointer;
         color: white;
-        border-radius: 0.2rem;
+        border-radius: 0.4rem;
         font-weight: bolder;
         font-size: 1.05rem;
       }
