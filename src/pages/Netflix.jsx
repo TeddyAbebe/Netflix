@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "../components/Navbar";
 
 export default function Netflix() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -7,5 +8,9 @@ export default function Netflix() {
     setIsScrolled(window.pageXOffset === 0 ? false : true);
     return () => (window.onscroll = null);
   };
-  return <div>Netflix</div>;
+  return (
+    <div>
+      <Navbar isScrolled={isScrolled} />
+    </div>
+  );
 }
