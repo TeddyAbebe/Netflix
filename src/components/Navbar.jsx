@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaPowerOff, FaSearch } from "react-icons/fa";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 
 export default function Navbar({ isScrolled }) {
+  const [showSearch, setShowSearch] = useState(false);
+  const [inputHover, setInputHover] = useState(false);
+  const navigate = useNavigate();
+
   const links = [
     { name: "Home", link: "/" },
     { name: "TV Shows", link: "/tv" },
     { name: "Movies", link: "/movies" },
-    { name: "My Fav", link: "/myfav" },
+    { name: "My List", link: "/mylist" },
   ];
 
-  const [showSearch, setShowSearch] = useState(false);
-  const [inputHover, setInputHover] = useState(false);
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if (!currentUser) navigate("/login");
+  });
 
   return (
     <Container>
-      <div className={`flex ${isScrolled ? "scrolled" : ""}`}>
+      <nav className={`flex ${isScrolled ? "scrolled" : ""}`}>
         <div className="left flex a-center">
           <div className="flex brand a-center j-center">
             <img src={logo} alt="logo" />
@@ -34,6 +39,7 @@ export default function Navbar({ isScrolled }) {
             })}
           </ul>
         </div>
+
         <div className="right flex a-center">
           <div className={`search ${showSearch ? "show-search" : ""}`}>
             <button
@@ -46,7 +52,7 @@ export default function Navbar({ isScrolled }) {
             </button>
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Titles, people, genres"
               onMouseEnter={() => setInputHover(true)}
               onMouseLeave={() => setInputHover(false)}
               onBlur={() => {
@@ -60,7 +66,7 @@ export default function Navbar({ isScrolled }) {
             <FaPowerOff />
           </button>
         </div>
-      </div>
+      </nav>
     </Container>
   );
 }
@@ -80,6 +86,7 @@ const Container = styled.div`
     padding: 0 4rem;
     align-items: center;
     transition: 0.3s ease-in-out;
+
     .left {
       gap: 2rem;
       .brand {
@@ -102,6 +109,51 @@ const Container = styled.div`
       gap: 1rem;
       button {
         background-color: transparent;
+        border: none;
+        cursor: pointer;
+        &:focus {
+          outline: none;
+        }
+        svg {
+          color: #f34242;
+          font_size: 1.2rem;
+        }
+      }
+      .search {
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+        padding: 0.2rem;
+        padding-left: 0.5rem;
+        button {
+          background-color: transparent;
+          svg {
+            color: white;
+          }
+        }
+        input {
+          width: 0;
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.1s ease-in-out;
+          background-color: transparent;
+          border: none;
+          color: white;
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+      .show-search {
+        border: 1px solid white;
+        border-radius: 0.2rem;
+        background-color: rgba(0, 0, 0, 0.6);
+        input {
+          width: 100%;
+          opacity: 1;
+          visibility: visible;
+          padding: 0.3rem;
+        }
       }
     }
   }
