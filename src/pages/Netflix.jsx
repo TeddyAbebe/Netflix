@@ -83,7 +83,7 @@ const Container = styled.div`
           border: none;
           border-radius: 0.2rem;
           cursor: pointer;
-          padding: 0.8rem;
+          padding: 0.6rem;
           padding-left: 1.5rem;
           padding-right: 2rem;
           transition: 0.3s ease-in-out;
