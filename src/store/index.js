@@ -15,11 +15,24 @@ export const getGenres = createAsyncThunk("netflix/genres", async() => {
     return genres
 })
 
+const getRawData = async (api, genres, paging) => {
+    const moviesArray = [];
+    for(let i = 1; moviesArray.length < 60 && i < 10; i++){
+        const {data} = await axios.get(`${api}`)
+    }
+}
+
 export const fetchMovies = createAsyncThunk("netflix/trending", async({type},thunkApi) => {
     const {netflix: { genres },
 } = thunkApi.getState();
-return
+    return getRawData(`${TMDB_BASE_URL}/trending/${type}/week?api_key=${API_KEY}`,
+    genres,
+    true    
+    )
+
 })
+
+// return getRawData(`${TMDB_BASE_URL}/discover/${type}?api_key=${API_KEY}$with_genres=${genre}`)
 
 const NetflixSlice = createSlice({
     name:"Netflix",
