@@ -14,6 +14,7 @@ export default function Netflix() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
+  const movies = useSelector((state) => state.netflix.movies)
 
   useEffect(() => {
     dispatch(getGenres());
@@ -27,6 +28,8 @@ export default function Netflix() {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
   };
+
+  // console.log(movies);
 
   return (
     <Container>
