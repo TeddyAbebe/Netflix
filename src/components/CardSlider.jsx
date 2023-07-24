@@ -3,7 +3,7 @@ import Card from "./Card";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-export default function CardSlider({ data, title }) {
+export default React.memo(function CardSlider({ data, title }) {
   const [showControls, setShowControls] = useState(false);
   const [sliderPosition, setSliderPosition] = useState(0);
   const listRef = useRef();
@@ -12,7 +12,7 @@ export default function CardSlider({ data, title }) {
     let distance = listRef.current.getBoundingClientRect().x - 70;
     if (direction === "left" && sliderPosition > 0) {
       listRef.current.style.transform = `translateX(${230 + distance}px)`;
-      setSliderPosition(sliderPosition + 1);
+      setSliderPosition(sliderPosition - 1);
     }
     if (direction === "right" && sliderPosition < 4) {
       listRef.current.style.transform = `translateX(${-230 + distance}px)`;
@@ -52,7 +52,7 @@ export default function CardSlider({ data, title }) {
       </div>
     </Container>
   );
-}
+});
 
 const Container = styled.div`
   gap: 1rem;
